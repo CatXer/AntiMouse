@@ -7,7 +7,8 @@ import java.util.Scanner;
 
 public class Settings {
 
-    public static final int FPS = 20;
+    int TIME_REALISE = 15;
+    static final int FPS = 20;
     private static String path = "./config.conf";
 
     public int DragSpeed = 10;
@@ -23,7 +24,16 @@ public class Settings {
     public int DOWN_WHEEL = 27;
     public int PRESS_WHEEL = 40;
 
-    public int TIME_REALISE = 15;
+    public boolean scrolling = true;
+    public String LEFT_ID_DESC;
+    public String UP_ID_DESC;
+    public String DOWN_ID_DESC;
+    public String RIGHT_ID_DESC;
+    public String LKM_ID_DESC;
+    public String PKM_ID_DESC;
+    public String PRESS_WHEEL_DESC;
+    public String UP_WHEEL_DESC;
+    public String DOWN_WHEEL_DESC;
 
 
     public static Settings LoadSettings() throws IOException {

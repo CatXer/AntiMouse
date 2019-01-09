@@ -1,6 +1,7 @@
 package com.sergprog.Robot;
 
 
+import com.sergprog.Main;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -20,19 +21,20 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
     private boolean up = false;
     private boolean right = false;
     private boolean down = false;
-
+    private boolean control = false;
+    private boolean shift;
     private boolean WheelUp;
     private boolean WheelDown;
 
     private boolean run;
-    private int daley = Settings.FPS * 100;
-
+    private int daley = Settings.FPS * 50;
 
     private static final Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
     private Commander commander;
 
     private HashSet<Integer> pressedCount;
     private int second_daley = 0;
+
 
     public KeyCatcher(Commander commander) {
         this.commander = commander;
@@ -68,6 +70,8 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
         if (!WheelDown && key == settings.UP_WHEEL) WheelUp = true;
         if (!WheelUp && key == settings.DOWN_WHEEL) WheelDown = true;
 
+        if (key == 29) control = true;
+        if (key == 3638) shift = true;
 
     }
 
@@ -87,6 +91,8 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
         if (key == settings.UP_WHEEL) WheelUp = false;
         if (key == settings.DOWN_WHEEL) WheelDown = false;
 
+        if (key == 29) control = false;
+        if (key == 3638) shift = false;
     }
 
     @Override
@@ -99,8 +105,15 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
             if (up) commander.Drag(0, -1);
             else if (down) commander.Drag(0, 1);
 
-            if (WheelUp) commander.mouseWheel(+settings.WheelSpeed);
-            else if (WheelDown) commander.mouseWheel(-settings.WheelSpeed);
+            if (control && shift) {
+                Main.minFrame.setVisible(!Main.minFrame.isVisible());
+                control = false;
+                shift = false;
+            }
+
+            if (settings.scrolling)
+                if (WheelUp) commander.mouseWheel(+settings.WheelSpeed);
+                else if (WheelDown) commander.mouseWheel(-settings.WheelSpeed);
 
 
             if (second_daley != 0 && pressedCount.size() != 0) {
@@ -108,7 +121,7 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
                 second_daley = 0;
             }
 
-            if (second_daley > settings.TIME_REALISE*1000/Settings.FPS) daley = Settings.FPS * 100;
+            if (second_daley > settings.TIME_REALISE * 1000 / Settings.FPS) daley = Settings.FPS * 100;
             else second_daley++;
 
             try {
@@ -119,8 +132,9 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
         }
     }
 
-    void close() {
+    public void close() {
         try {
+            run = false;
             GlobalScreen.unregisterNativeHook();
             GlobalScreen.removeNativeKeyListener(this);
         } catch (NativeHookException e) {
