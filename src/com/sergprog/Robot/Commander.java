@@ -1,10 +1,10 @@
-package com.sergprog;
+package com.sergprog.Robot;
 
 import java.awt.*;
 
 public class Commander extends Robot {
 
-    Commander(GraphicsDevice screen) throws AWTException {
+    public Commander(GraphicsDevice screen) throws AWTException {
         super(screen);
     }
 
