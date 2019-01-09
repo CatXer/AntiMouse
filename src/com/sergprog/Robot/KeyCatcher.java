@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.sergprog.Main.settings;
+
 
 public class KeyCatcher extends Thread implements NativeKeyListener {
 
@@ -54,17 +56,17 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
     public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
         int key = nativeKeyEvent.getKeyCode();
         pressedCount.add(key);
-        if (!right && key == Settings.LEFT_ID) left = true;
-        if (!left && key == Settings.RIGHT_ID) right = true;
-        if (!down && key == Settings.UP_ID) up = true;
-        if (!up && key == Settings.DOWN_ID) down = true;
+        if (!right && key == settings.LEFT_ID) left = true;
+        if (!left && key == settings.RIGHT_ID) right = true;
+        if (!down && key == settings.UP_ID) up = true;
+        if (!up && key == settings.DOWN_ID) down = true;
 
-        if (key == Settings.LKM_ID) commander.mousePress(InputEvent.BUTTON1_MASK);
-        if (key == Settings.PRESS_WHEEL) commander.mousePress(InputEvent.BUTTON2_MASK);
-        if (key == Settings.PKM_ID) commander.mousePress(InputEvent.BUTTON3_MASK);
+        if (key == settings.LKM_ID) commander.mousePress(InputEvent.BUTTON1_MASK);
+        if (key == settings.PRESS_WHEEL) commander.mousePress(InputEvent.BUTTON2_MASK);
+        if (key == settings.PKM_ID) commander.mousePress(InputEvent.BUTTON3_MASK);
 
-        if (!WheelDown && key == Settings.UP_WHEEL) WheelUp = true;
-        if (!WheelUp && key == Settings.DOWN_WHEEL) WheelDown = true;
+        if (!WheelDown && key == settings.UP_WHEEL) WheelUp = true;
+        if (!WheelUp && key == settings.DOWN_WHEEL) WheelDown = true;
 
 
     }
@@ -73,17 +75,17 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
     public void nativeKeyReleased(NativeKeyEvent nativeKeyEvent) {
         int key = nativeKeyEvent.getKeyCode();
         pressedCount.remove(key);
-        if (key == Settings.LEFT_ID) left = false;
-        if (key == Settings.RIGHT_ID) right = false;
-        if (key == Settings.UP_ID) up = false;
-        if (key == Settings.DOWN_ID) down = false;
+        if (key == settings.LEFT_ID) left = false;
+        if (key == settings.RIGHT_ID) right = false;
+        if (key == settings.UP_ID) up = false;
+        if (key == settings.DOWN_ID) down = false;
 
-        if (key == Settings.LKM_ID) commander.mouseRelease(InputEvent.BUTTON1_MASK);
-        if (key == Settings.PRESS_WHEEL) commander.mouseRelease(InputEvent.BUTTON2_MASK);
-        if (key == Settings.PKM_ID) commander.mouseRelease(InputEvent.BUTTON3_MASK);
+        if (key == settings.LKM_ID) commander.mouseRelease(InputEvent.BUTTON1_MASK);
+        if (key == settings.PRESS_WHEEL) commander.mouseRelease(InputEvent.BUTTON2_MASK);
+        if (key == settings.PKM_ID) commander.mouseRelease(InputEvent.BUTTON3_MASK);
 
-        if (key == Settings.UP_WHEEL) WheelUp = false;
-        if (key == Settings.DOWN_WHEEL) WheelDown = false;
+        if (key == settings.UP_WHEEL) WheelUp = false;
+        if (key == settings.DOWN_WHEEL) WheelDown = false;
 
     }
 
@@ -97,8 +99,8 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
             if (up) commander.Drag(0, -1);
             else if (down) commander.Drag(0, 1);
 
-            if (WheelUp) commander.mouseWheel(+Settings.WheelSpeed);
-            else if (WheelDown) commander.mouseWheel(-Settings.WheelSpeed);
+            if (WheelUp) commander.mouseWheel(+settings.WheelSpeed);
+            else if (WheelDown) commander.mouseWheel(-settings.WheelSpeed);
 
 
             if (second_daley != 0 && pressedCount.size() != 0) {
@@ -106,7 +108,7 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
                 second_daley = 0;
             }
 
-            if (second_daley > Settings.TIME_REALISE) daley = Settings.FPS * 100;
+            if (second_daley > settings.TIME_REALISE*1000/Settings.FPS) daley = Settings.FPS * 100;
             else second_daley++;
 
             try {

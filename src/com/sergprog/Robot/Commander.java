@@ -1,5 +1,7 @@
 package com.sergprog.Robot;
 
+import com.sergprog.Main;
+
 import java.awt.*;
 
 public class Commander extends Robot {
@@ -10,7 +12,7 @@ public class Commander extends Robot {
 
     void Drag(int dx, int dy) {
         Point xy = MouseInfo.getPointerInfo().getLocation();
-        mouseMove(xy.x + dx * Settings.DragSpeed, xy.y + dy * Settings.DragSpeed);
+        mouseMove(xy.x + dx * Main.settings.DragSpeed, xy.y + dy * Main.settings.DragSpeed);
     }
 
 }
