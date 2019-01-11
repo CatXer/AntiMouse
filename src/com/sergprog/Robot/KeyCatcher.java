@@ -114,7 +114,8 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
                     control = false;
                     shift = false;
                 } else if (control && r_alt) {
-                    Main.minFrame.setVisible(!Main.minFrame.isVisible());
+                    if (Main.minFrame.isVisible())
+                        Main.minFrame.setVisible(false);
                     pause = !pause;
                     control = false;
                     r_alt = false;
