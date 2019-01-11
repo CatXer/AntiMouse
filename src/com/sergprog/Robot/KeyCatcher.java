@@ -22,9 +22,11 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
     private boolean right = false;
     private boolean down = false;
     private boolean control = false;
-    private boolean shift;
+    private boolean shift = false;
+    private boolean r_alt = false;
     private boolean WheelUp;
     private boolean WheelDown;
+    private boolean pause = false;
 
     private boolean run;
     private int daley = Settings.FPS * 50;
@@ -71,6 +73,7 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
         if (!WheelUp && key == settings.DOWN_WHEEL) WheelDown = true;
 
         if (key == 29) control = true;
+        if (key == 56) r_alt = true;
         if (key == 3638) shift = true;
 
     }
@@ -92,6 +95,7 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
         if (key == settings.DOWN_WHEEL) WheelDown = false;
 
         if (key == 29) control = false;
+        if (key == 56) r_alt = false;
         if (key == 3638) shift = false;
     }
 
@@ -99,31 +103,44 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
     public void run() {
         super.run();
         while (run) {
+            if (!pause) {
+                if (left) commander.Drag(-1, 0);
+                else if (right) commander.Drag(1, 0);
+                if (up) commander.Drag(0, -1);
+                else if (down) commander.Drag(0, 1);
 
-            if (left) commander.Drag(-1, 0);
-            else if (right) commander.Drag(1, 0);
-            if (up) commander.Drag(0, -1);
-            else if (down) commander.Drag(0, 1);
+                if (control && shift) {
+                    Main.minFrame.setVisible(!Main.minFrame.isVisible());
+                    control = false;
+                    shift = false;
+                } else if (control && r_alt) {
+                    Main.minFrame.setVisible(!Main.minFrame.isVisible());
+                    pause = !pause;
+                    control = false;
+                    r_alt = false;
+                    daley = Settings.FPS * 100;
+                    continue;
+                }
 
-            if (control && shift) {
-                Main.minFrame.setVisible(!Main.minFrame.isVisible());
+
+                if (settings.scrolling)
+                    if (WheelUp) commander.mouseWheel(+settings.WheelSpeed);
+                    else if (WheelDown) commander.mouseWheel(-settings.WheelSpeed);
+
+
+                if (second_daley != 0 && pressedCount.size() != 0) {
+                    daley = Settings.FPS;
+                    second_daley = 0;
+                }
+
+                if (second_daley > settings.TIME_REALISE * 1000 / Settings.FPS) daley = Settings.FPS * 100;
+                else second_daley++;
+
+            } else if (control && r_alt) {
+                pause = false;
                 control = false;
-                shift = false;
+                r_alt = false;
             }
-
-            if (settings.scrolling)
-                if (WheelUp) commander.mouseWheel(+settings.WheelSpeed);
-                else if (WheelDown) commander.mouseWheel(-settings.WheelSpeed);
-
-
-            if (second_daley != 0 && pressedCount.size() != 0) {
-                daley = Settings.FPS;
-                second_daley = 0;
-            }
-
-            if (second_daley > settings.TIME_REALISE * 1000 / Settings.FPS) daley = Settings.FPS * 100;
-            else second_daley++;
-
             try {
                 sleep(daley);
             } catch (InterruptedException e) {
