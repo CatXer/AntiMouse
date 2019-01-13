@@ -60,17 +60,20 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
     public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
         int key = nativeKeyEvent.getKeyCode();
         pressedCount.add(key);
-        if (!right && key == settings.LEFT_ID) left = true;
-        if (!left && key == settings.RIGHT_ID) right = true;
-        if (!down && key == settings.UP_ID) up = true;
-        if (!up && key == settings.DOWN_ID) down = true;
 
-        if (key == settings.LKM_ID) commander.mousePress(InputEvent.BUTTON1_MASK);
-        if (key == settings.PRESS_WHEEL) commander.mousePress(InputEvent.BUTTON2_MASK);
-        if (key == settings.PKM_ID) commander.mousePress(InputEvent.BUTTON3_MASK);
+        if (!pause) {
+            if (!right && key == settings.LEFT_ID) left = true;
+            if (!left && key == settings.RIGHT_ID) right = true;
+            if (!down && key == settings.UP_ID) up = true;
+            if (!up && key == settings.DOWN_ID) down = true;
 
-        if (!WheelDown && key == settings.UP_WHEEL) WheelUp = true;
-        if (!WheelUp && key == settings.DOWN_WHEEL) WheelDown = true;
+            if (key == settings.LKM_ID) commander.mousePress(InputEvent.BUTTON1_MASK);
+            if (key == settings.PRESS_WHEEL) commander.mousePress(InputEvent.BUTTON2_MASK);
+            if (key == settings.PKM_ID) commander.mousePress(InputEvent.BUTTON3_MASK);
+
+            if (!WheelDown && key == settings.UP_WHEEL) WheelUp = true;
+            if (!WheelUp && key == settings.DOWN_WHEEL) WheelDown = true;
+        }
 
         if (key == 29) control = true;
         if (key == 56) r_alt = true;
@@ -82,18 +85,20 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
     public void nativeKeyReleased(NativeKeyEvent nativeKeyEvent) {
         int key = nativeKeyEvent.getKeyCode();
         pressedCount.remove(key);
-        if (key == settings.LEFT_ID) left = false;
-        if (key == settings.RIGHT_ID) right = false;
-        if (key == settings.UP_ID) up = false;
-        if (key == settings.DOWN_ID) down = false;
 
-        if (key == settings.LKM_ID) commander.mouseRelease(InputEvent.BUTTON1_MASK);
-        if (key == settings.PRESS_WHEEL) commander.mouseRelease(InputEvent.BUTTON2_MASK);
-        if (key == settings.PKM_ID) commander.mouseRelease(InputEvent.BUTTON3_MASK);
+        if (!pause) {
+            if (key == settings.LEFT_ID) left = false;
+            if (key == settings.RIGHT_ID) right = false;
+            if (key == settings.UP_ID) up = false;
+            if (key == settings.DOWN_ID) down = false;
 
-        if (key == settings.UP_WHEEL) WheelUp = false;
-        if (key == settings.DOWN_WHEEL) WheelDown = false;
+            if (key == settings.LKM_ID) commander.mouseRelease(InputEvent.BUTTON1_MASK);
+            if (key == settings.PRESS_WHEEL) commander.mouseRelease(InputEvent.BUTTON2_MASK);
+            if (key == settings.PKM_ID) commander.mouseRelease(InputEvent.BUTTON3_MASK);
 
+            if (key == settings.UP_WHEEL) WheelUp = false;
+            if (key == settings.DOWN_WHEEL) WheelDown = false;
+        }
         if (key == 29) control = false;
         if (key == 56) r_alt = false;
         if (key == 3638) shift = false;
