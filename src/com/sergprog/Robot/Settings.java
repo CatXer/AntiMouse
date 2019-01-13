@@ -8,11 +8,10 @@ import java.util.Scanner;
 public class Settings {
 
     int TIME_REALISE = 15;
-    static final int FPS = 20;
-    private static String path = "./config.conf";
+    public int FPS = 15;
+    public boolean scrolling = true;
 
-    public int DragSpeed = 10;
-    public int WheelSpeed = 1;
+    private static String path = "./config.conf";
 
     public int LEFT_ID = 57419;
     public int UP_ID = 57416;
@@ -24,7 +23,6 @@ public class Settings {
     public int DOWN_WHEEL = 27;
     public int PRESS_WHEEL = 40;
 
-    public boolean scrolling = true;
     public String LEFT_ID_DESC;
     public String UP_ID_DESC;
     public String DOWN_ID_DESC;

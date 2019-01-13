@@ -29,7 +29,7 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
     private boolean pause = false;
 
     private boolean run;
-    private int daley = Settings.FPS * 50;
+    private int daley = settings.FPS * 100;
 
     private static final Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
     private Commander commander;
@@ -103,7 +103,7 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
     public void run() {
         super.run();
         while (run) {
-            if (!pause) {
+            if (!pause && settings.FPS > 0) {
                 if (left) commander.Drag(-1, 0);
                 else if (right) commander.Drag(1, 0);
                 if (up) commander.Drag(0, -1);
@@ -114,31 +114,25 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
                     control = false;
                     shift = false;
                 } else if (control && r_alt) {
-                    if (Main.minFrame.isVisible())
-                        Main.minFrame.setVisible(false);
-                    pause = !pause;
+                    Pause();
                     control = false;
                     r_alt = false;
-                    daley = Settings.FPS * 100;
                     continue;
                 }
 
 
                 if (settings.scrolling)
-                    if (WheelUp) commander.mouseWheel(+settings.WheelSpeed);
-                    else if (WheelDown) commander.mouseWheel(-settings.WheelSpeed);
+                    if (WheelUp) commander.mouseWheel(1);
+                    else if (WheelDown) commander.mouseWheel(-1);
 
 
-                if (second_daley != 0 && pressedCount.size() != 0) {
-                    daley = Settings.FPS;
-                    second_daley = 0;
-                }
+                if (second_daley != 0 && pressedCount.size() != 0) SetWork();
 
-                if (second_daley > settings.TIME_REALISE * 1000 / Settings.FPS) daley = Settings.FPS * 100;
+                if (second_daley > settings.TIME_REALISE * 1000 / settings.FPS) SetSleep();
                 else second_daley++;
 
             } else if (control && r_alt) {
-                pause = false;
+                Pause();
                 control = false;
                 r_alt = false;
             }
@@ -148,6 +142,24 @@ public class KeyCatcher extends Thread implements NativeKeyListener {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void Pause() {
+        if (Main.minFrame.isVisible())
+            Main.minFrame.setVisible(false);
+        pause = !pause;
+        control = false;
+        r_alt = false;
+        SetSleep();
+    }
+
+    private void SetSleep() {
+        daley = settings.FPS * 100;
+    }
+
+    private void SetWork() {
+        daley = settings.FPS;
+        second_daley = 0;
     }
 
     public void close() {
